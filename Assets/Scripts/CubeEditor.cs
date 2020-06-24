@@ -7,16 +7,13 @@ using UnityEngine;
 [RequireComponent(typeof(Waypoint))]
 public class CubeEditor : MonoBehaviour
 {
-
-
-    TextMesh textMesh;
     Waypoint waypoint;
-
+    Pathfinder pathfinder;
 
     private void Awake()
     {
-        textMesh = GetComponentInChildren<TextMesh>();
         waypoint = GetComponent<Waypoint>();
+        pathfinder = FindObjectOfType<Pathfinder>();
     }
 
     void Update()
@@ -33,8 +30,14 @@ public class CubeEditor : MonoBehaviour
 
     private void UpdateLabel()
     {
+        TextMesh textMesh = GetComponentInChildren<TextMesh>();
         int gridSize = waypoint.GetGridSize();
-        string labelText = waypoint.GetGridPos().x / gridSize + "," + waypoint.GetGridPos().y / gridSize;
+
+        string labelText = 
+            waypoint.GetGridPos().x / gridSize + 
+            "," + 
+            waypoint.GetGridPos().y / gridSize;
+
         textMesh.text = labelText;
         gameObject.name = labelText;
     }
