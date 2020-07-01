@@ -17,13 +17,11 @@ public class EnemyMovement : MonoBehaviour
 
     IEnumerator FollowPath(List<Waypoint> path)
     {
-        Debug.Log("Starting Patrol");
         foreach (Waypoint waypoint in path)
         {
             var nextPosition = waypoint.transform.position;
             transform.position = nextPosition;
             yield return new WaitForSeconds(delayTimer);
         }
-        Debug.Log("Ending Patrol");
     }
 }
