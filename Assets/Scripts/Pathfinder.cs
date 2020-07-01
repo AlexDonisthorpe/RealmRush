@@ -82,12 +82,6 @@ public class Pathfinder : MonoBehaviour
         }
     }
 
-    private void ColourStartAndEnd()
-    {
-        startPoint.SetTopColor(Color.green);
-        endPoint.SetTopColor(Color.red);
-    }
-
     private void LoadBlocks()
     {
         Waypoint[] waypoints = FindObjectsOfType<Waypoint>();
@@ -113,7 +107,6 @@ public class Pathfinder : MonoBehaviour
     private void CalculatePath()
     {
         LoadBlocks();
-        ColourStartAndEnd();
         BreadthFirstSearch();
         CreatePath();
     }
