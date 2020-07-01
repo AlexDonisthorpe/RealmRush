@@ -35,7 +35,6 @@ public class Pathfinder : MonoBehaviour
 
         path.Add(startPoint);
         path.Reverse();
-        print("Path reversed");
     }
 
     private void BreadthFirstSearch()
@@ -104,11 +103,18 @@ public class Pathfinder : MonoBehaviour
 
     public List<Waypoint> GetPath()
     {
+        if (path.Count == 0)
+        {
+            CalculatePath();
+        }
+        return path;
+    }
+
+    private void CalculatePath()
+    {
         LoadBlocks();
         ColourStartAndEnd();
         BreadthFirstSearch();
         CreatePath();
-        return path;
     }
-
 }
