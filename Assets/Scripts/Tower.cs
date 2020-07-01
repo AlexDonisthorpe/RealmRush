@@ -5,15 +5,18 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
+    // Parameters
     [SerializeField] Transform objectToPan;
-    [SerializeField] Transform targetEnemy;
     [SerializeField] float attackRange = 100f;
     [SerializeField] ParticleSystem projectileParticle;
 
-    bool enemyExists = false;
+    // State
+    [SerializeField] Transform targetEnemy;
+
     // Update is called once per frame
     void Update()
     {
+        SetTargetEnemy();
         if (targetEnemy)
         {
             LookAtEnemy();
@@ -25,6 +28,34 @@ public class Tower : MonoBehaviour
         }
     }
 
+    private void SetTargetEnemy()
+    {
+        EnemyDamage[] sceneEnemies = FindObjectsOfType<EnemyDamage>();
+        print(sceneEnemies.Length);
+        if(sceneEnemies.Length == 0) { return; }
+
+        Transform closestEnemy = sceneEnemies[0].transform;
+
+        foreach(EnemyDamage testEnemy in sceneEnemies)
+        {
+            closestEnemy = GetClosestEnemy(closestEnemy, testEnemy);
+            targetEnemy = closestEnemy;
+        }
+    }
+
+    private Transform GetClosestEnemy(Transform currentEnemy, EnemyDamage testEnemy)
+    {
+        float testEnemyDistance = CheckEnemyDistance(testEnemy.transform);
+        float closestEnemyDistance = CheckEnemyDistance(currentEnemy.transform);
+
+        if (testEnemyDistance < closestEnemyDistance)
+        {
+            currentEnemy = testEnemy.transform;
+        }
+
+        return currentEnemy;
+    }
+
     private void ShootLasers()
     {
         ParticleSystem lasers = GetComponentInChildren<ParticleSystem>();
@@ -33,7 +64,7 @@ public class Tower : MonoBehaviour
 
     private void FireAtEnemy()
     {
-        float distanceToEnemy = Vector3.Distance(targetEnemy.transform.position, transform.position);
+        float distanceToEnemy = CheckEnemyDistance(targetEnemy);
         if (distanceToEnemy <= attackRange)
         {
             Shoot(true);
@@ -42,6 +73,11 @@ public class Tower : MonoBehaviour
         {
             Shoot(false);
         }
+    }
+
+    private float CheckEnemyDistance(Transform enemy)
+    {
+        return Vector3.Distance(enemy.transform.position, transform.position);
     }
 
     private void Shoot(bool active)
