@@ -32,7 +32,6 @@ public class Waypoint : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && isPlaceable)
         {
             FindObjectOfType<TowerFactory>().AddTower(this);
-            isPlaceable = false;
         }
     }
 }

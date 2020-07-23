@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,23 +7,37 @@ public class TowerFactory : MonoBehaviour
 {
     [SerializeField] Tower towerPrefab;
     [SerializeField] int maxTowers = 3;
-    private int currentTowers = 0;
+
+    Queue<Tower> towerQueue = new Queue<Tower>();
     
     public void AddTower(Waypoint baseWaypoint)
     {
-        if (currentTowers == maxTowers)
+        var towers = towerQueue.Count;
+        if(towers < maxTowers)
         {
-            Debug.Log("Can't place any more towers, the maximum number of towers has already been allocated");
-        }
-        else
+            InstantiateNewTower(baseWaypoint);
+        } else
         {
-            Transform parent = GameObject.Find("Towers").transform;
-            Instantiate(towerPrefab, baseWaypoint.transform.position, Quaternion.identity, parent);
-            baseWaypoint.isPlaceable = false;
-            currentTowers++;
+            MoveExistingTower(baseWaypoint);
         }
     }
 
+    private void MoveExistingTower(Waypoint baseWaypoint)
+    {
+        Debug.Log("Can't place any more towers, the maximum number of towers has already been allocated");
+        Tower oldTower = towerQueue.Dequeue();
+        oldTower.baseWaypoint.isPlaceable = true;
+        oldTower.baseWaypoint = baseWaypoint;
+        oldTower.transform.position = baseWaypoint.transform.position;
+        towerQueue.Enqueue(oldTower);
+    }
 
-
+    private void InstantiateNewTower(Waypoint baseWaypoint)
+    {
+        Transform parent = GameObject.Find("Towers").transform;
+        Tower newTower = Instantiate(towerPrefab, baseWaypoint.transform.position, Quaternion.identity, parent);
+        baseWaypoint.isPlaceable = false;
+        towerQueue.Enqueue(newTower);
+        newTower.baseWaypoint = baseWaypoint;
+    }
 }
