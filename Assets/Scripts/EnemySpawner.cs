@@ -8,6 +8,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] EnemyMovement enemyPrefab;
 
     Transform enemyParent;
+    [SerializeField] PlayerScore scoreBoard;
 
     void Start()
     {
@@ -20,6 +21,7 @@ public class EnemySpawner : MonoBehaviour
         while (true) // todo set end condition
         {
             Instantiate(enemyPrefab, transform.position, Quaternion.identity, enemyParent);
+            scoreBoard.UpdateScore();
             yield return new WaitForSeconds(secondsBetweenSpawns);
         }
     }
