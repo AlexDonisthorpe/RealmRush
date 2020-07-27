@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] float delayTimer = 1f;
+    [SerializeField] float movementPeriod = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +21,8 @@ public class EnemyMovement : MonoBehaviour
         {
             var nextPosition = waypoint.transform.position;
             transform.position = nextPosition;
-            yield return new WaitForSeconds(delayTimer);
+            yield return new WaitForSeconds(movementPeriod);
         }
+        GetComponent<EnemyDamage>().KillEnemy();
     }
 }

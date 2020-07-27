@@ -19,11 +19,16 @@ public class EnemyDamage : MonoBehaviour
         }
     }
 
-    private void KillEnemy()
+    public void KillEnemy()
+    {
+        PlayDeathVFX();
+        Destroy(gameObject);
+    }
+
+    private void PlayDeathVFX()
     {
         ParticleSystem deathFX = Instantiate(deathFXPrefab, transform.position, Quaternion.identity);
-        Destroy(deathFX.gameObject, deathFX.main.duration);
-        Destroy(gameObject);
+        Destroy(deathFX.gameObject, deathDelay);
     }
 
     void ProcessHit()
